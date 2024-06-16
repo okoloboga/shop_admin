@@ -45,6 +45,21 @@ income = Table(
     Column("income_selfprice", BigInteger),  # 8
 )
 
+process = Table(
+    "process",
+    metadata,
+    Column("index", Integer, primary_key=True),  # 0
+    Column("user_id", BigInteger),  # 1
+    Column("delivery_address", String),  # 2
+    Column("date_and_time", String),  # 3
+    Column("item_index", Integer),  # 4
+    Column("category", String),  # 5
+    Column("name", String),  # 6
+    Column("count", Integer),  # 7
+    Column("income", BigInteger),  # 8
+    Column("pure_income", BigInteger)  # 9
+)
+
 outcome = Table(
     "outcome",
     metadata,
