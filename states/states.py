@@ -29,4 +29,8 @@ class AddRowSG(StatesGroup):
 
 class EditRowSG(StatesGroup):
     edit_row = State()
+    edit = State()
+    delete = State()
+    delete_confirmed = State()
+    changes_confirmed = State()
 

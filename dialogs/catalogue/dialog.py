@@ -1,6 +1,6 @@
 from aiogram_dialog import Dialog, Window
 from aiogram_dialog.widgets.text import Format
-from aiogram_dialog.widgets.kbd import Select, Group, Button
+from aiogram_dialog.widgets.kbd import Group, Button
 
 from states import CatalogueSG
 from .getter import *

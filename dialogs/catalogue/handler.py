@@ -4,7 +4,7 @@ from aiogram import Router
 from aiogram.types import CallbackQuery
 from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.kbd import Select
-from sqlalchemy.ext.asyncio.engine import AsyncEngine
+
 
 from states import ItemSG
 

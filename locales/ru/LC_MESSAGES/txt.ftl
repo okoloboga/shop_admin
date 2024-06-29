@@ -7,14 +7,8 @@ button-catalogue = 📜 Каталог 📜
 button-great = 👌 Отлично! 👌
 button-back = ◀️ Назад
 button-next = Вперед ▶️
-
-button-category = 📊 Категория 📊
-button-name = 🆕 Название 🆕
-button-description = 📑 Описание 📑
-button-image = 🏞 Ссылка на картинку 🏞
-button-sell-price = 💲 Стоимость 💲
-button-self-price = 💲 Себестоимость 💲
-button-count = ✖️ Количество ✖️
+button-confirm = ✅ Подтверждаю ✅
+button-edit = 📝 Редактировать 📝
 button-delete = ❌ Удалить ❌
 
 # Messages
@@ -39,7 +33,7 @@ fill-category = Введи 📊 <b>Категорию Товара</b>
 
 wrong-category = Введена неверная категория
 
-fill-name = Введи 🆕 <b>Название Товара</b>
+fill-name = Введи 🏷 <b>Название Товара</b>
 
             Это может быть строка из букв и цифр
 
@@ -76,7 +70,7 @@ wrong-price-count = Введена неверная цена или количе
 confirm-new-item = Проверь введенные данные!
 
                    📊 Категория Товара: <b>{ $category }</b>
-                   🆕 Название Товара: <b>{ $name }</b>
+                   🏷 Название Товара: <b>{ $name }</b>
                    📑 Описание Товара:
                    <b>{ $description }</b>
 
@@ -99,7 +93,7 @@ item-complete = <b>Отлично!</b>
                 ввод <b>Нового Товара</b>
 
 item-show = 📊 Категория: <b>{ $category }</b>
-            🆕 Название: <b>{ $name }</b>
+            🏷 Название: <b>{ $name }</b>
             📑 Описание:
             <b>{ $description }</b>
 
@@ -110,19 +104,37 @@ item-show = 📊 Категория: <b>{ $category }</b>
             💲 Себестоимоть: <b>{ $self_price }</b>
             ✖️ Количество: <b>{ $count }</b>
 
-edit-menu = Что необходимо изменить?
+edit-menu = Для изменения напиши <code>#что_меняешь</code>
+            и новое значение. Например, что бы поменять название
+            напиши <code>#name Новое Название</code>
 
-delete-menu = Ты уверен что хочешь удалить
-              этот товар?
+            📊 Категория - <code>#category</code> - { $category }
+            🏷 Название - <code>#name</code> - { $name }
+            📑 Описание - <code>#description</code> -
+            { $description }
+            🏞 Изображение - <code>#image</code> -
+            { $image }
+            💲 Стоимость - <code>#sell_price</code> - { $sell_price }
+            💲 Себестоимость - <code>#self_price</code> - { $self_price }
+            ✖️ Количество - <code>#count</code> - { $count }
 
-              📊 <b>{ $category }</b>
-              🆕 <b>{ $name }</b>
-              📑 <b>{ $description }</b>
-              🏞 { $image }
+delete-confirm = Ты уверен что хочешь удалить
+                 этот товар?
 
-              💲 Стоимость: <b>{ $sell_price }</b>
-              💲 Себестоимоть: <b>{ $self_price }</b>
-              ✖️ Количество: <b>{ $count }</b>
+                 📊 <b>{ $category }</b>
+                 🏷 <b>{ $name }</b>
+                 📑 <b>{ $description }</b>
+                 🏞 { $image }
+
+                 💲 Стоимость: <b>{ $sell_price }</b>
+                 💲 Себестоимоть: <b>{ $self_price }</b>
+                 ✖️ Количество: <b>{ $count }</b>
+
+delete-complete = Удаление завершено!
+
+changes-complete = Редактирование завершено!
+
+wrong-changes = Введены неверный зарпрос на изменения
 
 
 

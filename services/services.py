@@ -8,7 +8,7 @@ from sqlalchemy import insert, delete, select, column, func
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
-from database import users, catalogue, income
+from database import users, catalogue, income, edited
 from .ton_services import wallet_deploy
 
 logger = logging.getLogger(__name__)
@@ -130,7 +130,6 @@ async def new_item(
             len_income = int(row[0])
             logger.info(f'Income table length is {len_income}')
 
-
     # Writing statements for Catalogue and Income tables
     catalogue_statement = insert(catalogue).values(
         index=len_catalogue,
@@ -160,4 +159,146 @@ async def new_item(
         await conn.execute(income_statement)
         await conn.commit()
         logger.info('New item in Catalogue and Income are commited')
+
+
+# Deleting item from database
+async def delete_item(
+        db_engine: AsyncEngine,
+        admin_id: int,
+):
+    logger.info(f'delete_item({admin_id})')
+    page: int  # Current page of user from database
+
+    # Get current users page
+    user_page = (
+        select(column("page"))
+        .select_from(users)
+        .where(users.c.telegram_id == admin_id)
+    )
+
+    async with db_engine.connect() as conn:
+        page_raw = await conn.execute(user_page)
+        for row in page_raw:
+            page = row[0]
+            logger.info(f'Statement PAGE: {row[0]} executed of user {admin_id}, page is {page}')
+
+    # Delete current item
+    delete_item_statement = (
+        delete(catalogue)
+        .where(catalogue.c.index == page)
+    )
+
+    # Commit to database
+    async with db_engine.connect() as conn:
+        await conn.execute(delete_item_statement)
+        await conn.commit()
+        logger.info(f'User {admin_id} deleted item #{page}')
+
+
+# Validate changes entered by Admin
+def check_changes(changes: str) -> dict:
+    changes_types = {
+                     'category': str,
+                     'name': str,
+                     'description': str,
+                     'image': str,
+                     'sell_price': int,
+                     'self_price': int,
+                     'count': int
+    }
+
+    if changes[0] == '#':
+
+        # drop #
+        changes_raw = changes[1:].split()
+
+        # is correct type of change
+        if changes_raw[0] in changes_types:
+
+            # unite changes description, like {'description': 'very taste banana'}
+            changes_united = {changes_raw[0]: ' '.join(changes_raw[1:])}
+
+            # check for data type of changes
+            if changes_types[changes_united[0]] is type(changes_united[1]):
+                if (((changes_united[0] == 'image')
+                        and validators.url(changes_united[1]))
+                        or changes_united[0] != 'image'):
+                    return changes_united
+                raise ValueError
+            raise ValueError
+        raise ValueError
+    raise ValueError
+
+
+# Writing changes of item in database
+async def change_item(
+        db_engine: AsyncEngine,
+        admin_id: int,
+        new_data: dict
+):
+    logger.info(f'change_item({admin_id}, {new_data})')
+    len_edited: int  # Number of items in Edited table
+    page: int  # Current page of user from database
+
+    # Get current users page
+    user_page = (
+        select(column("page"))
+        .select_from(users)
+        .where(users.c.telegram_id == admin_id)
+    )
+
+    async with db_engine.connect() as conn:
+        page_raw = await conn.execute(user_page)
+        for row in page_raw:
+            page = row[0]
+            logger.info(f'Statement PAGE: {row[0]} executed of user {admin_id}, page is {page}')
+
+    # Getting current date and time
+    now = datetime.now()
+
+    # dd/mm/YY H:M:S
+    date_and_time = now.strftime("%d/%m/%Y %H:%M:%S")
+
+    # Getting length of Edited tables
+    len_edited_statement = (
+        select(func.count())
+        .select_from(edited)
+    )
+
+    async with db_engine.connect() as conn:
+        raw_edited_len = await conn.execute(len_edited_statement)
+        for row in raw_edited_len:
+            len_edited = int(row[0])
+            logger.info(f'Catalogue table length is {len_edited}')
+
+    # Getting item metadata
+    item = await get_item_metadata(
+        int(page),
+        db_engine
+    )
+
+    # Insert new row to Edited table
+    edited_statement = insert(edited).values(
+        index=len_edited,
+        admin_id=admin_id,
+        date_and_time=date_and_time,
+        item_index=page,
+        category=item['category'],
+        name=item['name'],
+        commit=' '.join(new_data)
+    )
+
+    # Update data in Catalogue table
+    update_catalogue = (catalogue.update()
+                        .values(**new_data)
+                        .where(catalogue.c.index == page)
+                        )
+
+    async with db_engine.connect() as conn:
+        await conn.execute(update_catalogue)
+        await conn.execute(edited_statement)
+        await conn.commit()
+        logger.info(f'Users {admin_id} page is updated to {page}')
+
+
 

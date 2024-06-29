@@ -1,16 +1,14 @@
 import logging
 
 from aiogram import Router
-from aiogram.utils.deep_linking import decode_payload
-from aiogram.filters import CommandStart, CommandObject
-from aiogram.types import CallbackQuery, Message
-from aiogram_dialog import DialogManager, StartMode
+from aiogram.types import CallbackQuery
+from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.input.text import TextInput, ManagedTextInput
 
 from fluentogram import TranslatorRunner
 from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
-from states import StartSG, CatalogueSG, AddRowSG, EditRowSG
+from states import AddRowSG
 
 
 router_add_row = Router()
