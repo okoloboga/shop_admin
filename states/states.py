@@ -34,3 +34,8 @@ class EditRowSG(StatesGroup):
     delete_confirmed = State()
     changes_confirmed = State()
 
+class ConfirmOrderSG(StatesGroup):
+    select_order = State()
+    selected_order = State()
+    accept_order = State()
+    decline_order = State()

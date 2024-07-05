@@ -8,7 +8,7 @@ from aiogram_dialog import DialogManager, StartMode
 
 from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
-from states import StartSG, CatalogueSG, AddRowSG, EditRowSG
+from states import *
 
 
 router_start = Router()
@@ -65,7 +65,7 @@ async def switch_to_catalogue(
 
 
 # Switch to Add Row dialog
-async def add_row(
+async def switch_to_add_row(
         callback: CallbackQuery,
         db_engine: AsyncEngine,
         dialog_manager: DialogManager
@@ -76,7 +76,7 @@ async def add_row(
 
 
 # Switch to Edit Row dialog
-async def edit_row(
+async def switch_to_edit_row(
         callback: CallbackQuery,
         db_engine: AsyncEngine,
         dialog_manager: DialogManager
@@ -84,4 +84,15 @@ async def edit_row(
     logger.info(f'Switch to Edit Row dialog by user {callback.from_user.id}')
     await dialog_manager.start(state=EditRowSG.edit_row,
                                data={'user_id': callback.from_user.id})
+
+
+# Switch to Confirm Order dialog
+async def switch_to_confirm_order(
+        callback: CallbackQuery,
+        db_engine: AsyncEngine,
+        dialog_manager: DialogManager
+):
+        logger.info(f'Switch to Confirm Order dialog by user {callback.from_user.id}')
+        await dialog_manager.start(state=ConfirmOrderSG.select_order,
+                                   data={'user_id': callback.from_user.id})
 

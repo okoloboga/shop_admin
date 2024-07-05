@@ -302,3 +302,37 @@ async def change_item(
 
 
 
+# Get order information
+async def get_order_data(
+        db_engine: AsyncEngine,
+        order: int
+) -> list:
+    selected_order: list  # For putting order here 
+    selected_order_statement = (
+        select(column("*"))
+        .select_from(orders)
+        .where(orders.c.index == int(order))
+    )
+    
+    async with db_engine.connect() as conn:
+        order_raw = await conn.execute(selected_order_statement)
+        for row in order_raw:
+            selected_order = tuple(row)
+            logging.info(f'Selected order {order}')
+            
+    return selected_order
+
+
+# Accepting order
+async def accept_order(
+        db_engine: AsyncEngine,
+        user_id: int,
+        order: int,
+        i18n: TranslatorRunner
+):
+    logger.info(f'Accepting order {order} by {user_id}')
+    costumer_id: int  # ID of costumer for sending notification
+    
+    
+
+
