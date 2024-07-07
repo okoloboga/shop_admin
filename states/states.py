@@ -35,7 +35,11 @@ class EditRowSG(StatesGroup):
     changes_confirmed = State()
 
 class ConfirmOrderSG(StatesGroup):
+    select_status = State()
     select_order = State()
-    selected_order = State()
+    new_order = State()
     accept_order = State()
     decline_order = State()
+    accepted_order = State()
+    declined_order = State()
+    completed_order = State()

@@ -93,6 +93,6 @@ async def switch_to_confirm_order(
         dialog_manager: DialogManager
 ):
         logger.info(f'Switch to Confirm Order dialog by user {callback.from_user.id}')
-        await dialog_manager.start(state=ConfirmOrderSG.select_order,
+        await dialog_manager.start(state=ConfirmOrderSG.select_status,
                                    data={'user_id': callback.from_user.id})
 

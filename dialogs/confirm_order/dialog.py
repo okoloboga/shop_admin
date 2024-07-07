@@ -16,27 +16,36 @@ from services.services import check_order
 """Confirming orders"""
 comfirm_order = Dialog(
     Window(
+        Format('{select_status}'),
+        Button(Format('{button_new_orders}'), id='b_new_orders', on_click=new_orders),
+        Button(Format('{button_accepted_orders}'), id='b_accepted_orders', on_click=accepted_orders),
+        Button(Format('{button_declined_orders}'), id='b_declined_orders', on_click=declined_orders),
+        Button(Format('{button_back}'), id='b_back', on_click=go_start),
+        getter=select_status_getter,
+        state=ConfirmOrderSG.select_status        
+    ),
+    Window(
         Format('{orders_list}'),
         List(field=Format('<b>#{item[0]}</b> {item[1]} {item[2]} {item[3]}'),
             items='orders'),
-                TextInput(
-                    id='select_order',
-                    type_factory=check_order,
-                    on_success=select_order,
-                    on_error=wrong_order
+        TextInput(
+            id='select_order',
+            type_factory=check_order,
+            on_success=select_order,
+            on_error=wrong_order
             ),
         Button(Format('{button_back}'), id='b_back', on_click=go_start),
-        getter=select_order_getter,
+        getter=orders_list_getter,
         state=ConfirmOrderSG.select_order
     ),
     Window(
-        Format('{selected_order}'),
+        Format('{new_selected_order}'),
         Format('{order_data}'),       
         Button(Format('{button_accept_order}'), id='b_accept_order', on_click=accept_order),
         Button(Format('{button_back}'), id='b_back', on_click=go_start),
         Button(Format('{button_decline_order}'), id='b_decline_order', on_click=decline_order),
-        getter=selected_order_getter,
-        state=ConfirmOrderSG.selected_order
+        getter=new_order_getter,
+        state=ConfirmOrderSG.new_order
     ),
     Window(
         Format('{accept_order}'),
@@ -51,11 +60,30 @@ comfirm_order = Dialog(
     Window(
         Format('{decline_order}'),
         Format('{order_data}'),   
-        Button(Format('{button_confirm_decline_order}', 
-                      id='b_confirm_decline_order', 
-                      on_click=confirm_decline_order)), 
+        TextInput(
+            id='decline_order',
+            type_factory=str,
+            on_success=confirm_decline_order,
+            on_error=wrong_reason
+            ), 
         Button(Format('{button_back}'), id='b_back', on_click=go_start),
         getter=decline_order_getter,
         state=ConfirmOrderSG.decline_order
+    ),
+    Window(
+        Format('{accepted_order}'),
+        Format('{order_data}'),
+        Button(Format('{button_complete_order}'), id='b_complete_order', on_click=complete_order),
+        Button(Format('{button_back}'), id='b_back', on_click=go_start),
+        Button(Format('{button_decline_order}'), id='b_decline_order', on_click=decline_order),
+        getter=new_order_getter,
+        state=ConfirmOrderSG.accepted_order
+    ),
+    Window(
+        Format('{declined_order}'),
+        Format('{order_data}'),
+        Button(Format('{button_back}'), id='b_back', on_click=go_start),
+        getter=new_order_getter,
+        state=ConfirmOrderSG.declined_order
     )
 )
